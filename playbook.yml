@@ -1,0 +1,13 @@
+---
+- name: Install repositories
+  hosts: localhost
+  become: true
+  gather_facts: true
+  roles:
+    - role: install-repos
+      apt_repositories:
+        - repo: deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main
+          key: https://packages.microsoft.com/keys/microsoft.asc
+          filename: vscode.list
+        - repo: 
+          key: https://download.docker.com/linux/ubuntu/gpg
