@@ -1,0 +1,7 @@
+---
+- name: Install packages
+  apt:
+    name: "{{ item.name | default(omit)}}"
+    deb: "{{ item.deb | default(omit) }}"
+    state: present
+  with_items: "{{ packages }}"

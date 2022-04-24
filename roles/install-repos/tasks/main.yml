@@ -1,20 +1,22 @@
----
 - name: Add apt repository
   apt_repository:
     repo: '{{ item.repo }}'
     state: present
-    filename: '{{ item.filename }}'
+    filename: '{{ item.filename | default(omit) }}'
+    update_cache: false
   with_items: "{{ apt_repositories }}"
   register: result
 
 - name: Add apt key
   apt_key: 
-    url: "{{ item.key }}"
-    state: present"
+    url: "{{ item.key | default(omit) }}"
+    state: present
+    keyring: "{{ item.keyring | default(omit) }}"
+    keyserver: "{{ item.keyserver | default(omit) }}"
+    id: "{{ item.id | default(omit) }}"
   with_items: "{{ apt_repositories }}"
-  when: item.key is defined
+  when: item.key is defined or item.keyserver is defined
 
 - name: Update apt cache
-  apt: update_cache=yes
-  when: result|changed
-
+  apt: 
+    update_cache: yes
