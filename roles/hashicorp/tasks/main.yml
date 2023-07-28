@@ -1,0 +1,32 @@
+---
+
+- name: Install dependencies (apt)
+  ansible.builtin.apt:
+    name:
+      - gnupg
+    state: present
+
+- name: Create APT keyrings dir (apt)
+  ansible.builtin.file:
+    path: '/etc/apt/keyrings'
+    state: directory
+    mode: 'u=rwx,go=rx'
+
+- name: Install key (apt)
+  ansible.builtin.get_url:
+    url: 'https://apt.releases.hashicorp.com/gpg'
+    dest: '/etc/apt/keyrings/hashicorp-archive-keyring.gpg'
+    mode: 'u=rw,go=r'
+    force: yes
+
+- name: Add hashicorp repository (apt)
+  ansible.builtin.apt_repository:
+    repo: 'deb [arch=amd64 signed-by=/etc/apt/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com jammy main'
+    state: present
+    filename: 'hashicorp'
+    update_cache: true
+
+- name: Install terraform packages (apt)
+  ansible.builtin.apt:
+    name: terraform
+    state: present

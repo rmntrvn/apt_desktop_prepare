@@ -1,0 +1,34 @@
+---
+
+- name: Install dependencies (apt)
+  ansible.builtin.apt:
+    name:
+      - gpg
+      - openjdk-17-jdk
+      - openjdk-17-jre
+    state: present
+
+- name: Create APT keyrings dir (apt)
+  ansible.builtin.file:
+    path: '/etc/apt/keyrings'
+    state: directory
+    mode: 'u=rwx,go=rx'
+
+- name: Install key (apt)
+  ansible.builtin.get_url:
+    url: 'https://dbeaver.io/debs/dbeaver.gpg.key'
+    dest: '/etc/apt/keyrings/dbeaver.gpg.key'
+    mode: 'u=rw,go=r'
+    force: yes
+
+- name: Add dbeaver repository (apt)
+  ansible.builtin.apt_repository:
+    repo: 'deb [signed-by=/usr/share/keyrings/dbeaver.gpg.key] https://dbeaver.io/debs/dbeaver-ce /'
+    state: present
+    filename: 'dbeaver'
+    update_cache: true
+
+- name: Install dbeaver (apt)
+  ansible.builtin.apt:
+    name: 'dbeaver-ce'
+    state: present

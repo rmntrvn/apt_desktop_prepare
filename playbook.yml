@@ -1,118 +1,80 @@
 ---
-- name: Install repositories
+
+- name: Install basic components
   hosts: localhost
   become: true
   gather_facts: true
   roles:
-    - role: install-repos
-      apt_repositories:
-        - repo: 'deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main'
-          key: 'https://packages.microsoft.com/keys/microsoft.asc'
-          filename: 'vscode'
-          keyring: '/etc/apt/trusted.gpg.d/packages.microsoft.gpg'
-        - repo: 'deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu focal stable'
-          key: 'https://download.docker.com/linux/ubuntu/gpg'
-          filename: 'docker'
-          keyring: '/etc/apt/trusted.gpg.d/docker-archive-keyring.gpg'
-        - repo: 'deb https://dbeaver.io/debs/dbeaver-ce /'
-          key: 'https://dbeaver.io/debs/dbeaver.gpg.key'
-          filename: 'dbeaver'
-        - repo: 'deb https://packages.clickhouse.com/deb stable main'
-          keyserver: 'hkp://keyserver.ubuntu.com:80'
-          id: '8919F6BD2B48D754'
-          filename: 'clickhouse'
-        - repo: 'deb https://download.sublimetext.com/ apt/stable/'
-          key: 'https://download.sublimetext.com/sublimehq-pub.gpg'
-          filename: 'sublime-text'
-        - repo: deb [arch=amd64] https://download.virtualbox.org/virtualbox/debian bullseye contrib
-          key: 'https://www.virtualbox.org/download/oracle_vbox_2016.asc'
-          filename: 'vbox'
-        - repo: 'deb [arch=amd64] https://apt.releases.hashicorp.com bullseye main'
-          key: 'https://apt.releases.hashicorp.com/gpg'
-          filename: 'hashicorp'
-        - repo: deb [signed-by=/etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main
-          key: 'https://packages.cloud.google.com/apt/doc/apt-key.gpg'
-          keyring: '/etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg'
-          filename: 'kubernetes'
-        - repo: 'deb https://baltocdn.com/helm/stable/debian/ all main'
-          key: 'https://baltocdn.com/helm/signing.asc'
-          filename: 'helm'
-
     - role: install-packages
-      packages:
-        - name: apt-transport-https
-        - name: ca-certificates
-        - name: clickhouse-client
-        - name: code
-        - name: containerd.io
-        - name: cups
-        - name: curl
-        - name: dbeaver-ce
-        - name: dirmngr
-        - name: dmidecode
-        - name: docker-ce
-        - name: docker-ce-cli
-        - name: filezilla
-        - name: fping
-        - name: gimp
-        - name: git
-        - name: gnupg
-        - name: groovy
-        - name: htop
-        - name: inkscape
-        - name: iperf3
-        - name: jq
-        - name: keepassxc
-        - name: kubectl
-        - name: linphone
-        - name: make
-        - name: maven
-        - name: mc
-        - name: neofetch
-        - name: net-tools
-        - name: nmap
-        - name: obs-studio
-        - name: openconnect
-        - name: openjdk-11-jdk
-        - name: pavucontrol
-        - name: peek
-        - name: pidgin
-        - name: postgresql-client
-        - name: pwgen
-        - name: qbittorrent
-        - name: ranger
-        - name: remmina
-        - name: resolvconf
-        - name: s3cmd
-        - name: shadowsocks-libev
-        - name: simplescreenrecorder
-        - name: sshpass
-        - name: sublime-text
-        - name: tcpdump
-        - name: telnet
-        - name: telegram-desktop
-        - name: terraform
-        - name: testdisk
-        - name: thunderbird
-        - name: vault
-        - name: vim
-        - name: virtualbox-6.1
-        - name: vlc
-        - name: vokoscreen
-        - name: wget
-        - name: whois
-        - name: wireguard
-        - name: wireshark
-        - deb: https://downloads.realvnc.com/download/file/viewer.files/VNC-Viewer-6.22.315-Linux-x64.deb
-        - deb: https://go.skype.com/skypeforlinux-64.deb
-        - deb: https://discord.com/api/download?platform=linux&format=deb
-        - deb: https://downloads.slack-edge.com/releases/linux/4.25.0/prod/x64/slack-desktop-4.25.0-amd64.deb
-        - deb: https://download.teamviewer.com/download/linux/teamviewer_amd64.deb
-        - deb: https://zoom.us/client/latest/zoom_amd64.deb
-        - deb: https://dl.google.com/linux/deb/pool/main/g/google-chrome-stable/google-chrome-stable_100.0.4896.127-1_amd64.deb
-        - deb: https://downloads.mongodb.com/compass/mongodb-compass_1.31.1_amd64.deb
-        - deb: https://github.com/jgraph/drawio-desktop/releases/download/v17.4.2/drawio-amd64-17.4.2.deb
 
+- name: Install VS Code
+  hosts: localhost
+  become: true
+  gather_facts: true
+  roles:
+    - role: vscode
+
+- name: Install docker
+  hosts: localhost
+  become: true
+  gather_facts: true
+  roles:
+    - role: docker
+
+- name: Install dbeaver
+  hosts: localhost
+  become: true
+  gather_facts: true
+  roles:
+    - role: dbeaver
+
+- name: Install clickhouse-client
+  hosts: localhost
+  become: true
+  gather_facts: true
+  roles:
+    - role: clickhouse
+
+- name: Install sublime-text
+  hosts: localhost
+  become: true
+  gather_facts: true
+  roles:
+    - role: sublime-text
+
+- name: Install virtual-box
+  hosts: localhost
+  become: true
+  gather_facts: true
+  roles:
+    - role: virtual-box
+
+- name: Install hashicorp terraform
+  hosts: localhost
+  become: true
+  gather_facts: true
+  roles:
+    - role: hashicorp
+
+- name: Install kubernetes kubectl
+  hosts: localhost
+  become: true
+  gather_facts: true
+  roles:
+    - role: kubernetes
+
+- name: Install helm
+  hosts: localhost
+  become: true
+  gather_facts: true
+  roles:
+    - role: helm
+
+- name: Install zsh
+  hosts: localhost
+  become true
+  gather_facts: true
+  roles:
     - role: gantsign.oh-my-zsh
       users:
         - username: rmntrvn

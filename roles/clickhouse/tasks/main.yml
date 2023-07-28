@@ -1,0 +1,27 @@
+---
+
+- name: Install dependencies (apt)
+  ansible.builtin.apt:
+    name:
+      - apt-transport-https 
+      - ca-certificates
+      - dirmngr
+    state: present
+
+- name: Add clickhouse key (apt)
+  ansible.builtin.apt_key: 
+    keyserver: "hkp://keyserver.ubuntu.com:80"
+    id: '8919F6BD2B48D754'
+    state: present
+
+- name: Add clickhouse repository (apt)
+  ansible.builtin.apt_repository:
+    repo: 'deb https://packages.clickhouse.com/deb stable main'
+    state: present
+    filename: 'clickhouse'
+    update_cache: true
+
+- name: Update apt cache
+  ansible.builtin.apt: 
+    name: clickhouse-client
+    state: present

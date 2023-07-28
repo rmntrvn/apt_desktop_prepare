@@ -1,0 +1,32 @@
+---
+
+- name: Install dependencies (apt)
+  ansible.builtin.apt:
+    name:
+      - apt-transport-https
+    state: present
+
+- name: Create APT keyrings dir (apt)
+  ansible.builtin.file:
+    path: '/etc/apt/keyrings'
+    state: directory
+    mode: 'u=rwx,go=rx'
+
+- name: Install key (apt)
+  ansible.builtin.get_url:
+    url: 'https://www.virtualbox.org/download/oracle_vbox_2016.asc'
+    dest: '/etc/apt/keyrings/oracle-virtualbox-2016.gpg'
+    mode: 'u=rw,go=r'
+    force: yes
+
+- name: Add virtual box repository (apt)
+  ansible.builtin.apt_repository:
+    repo: 'deb [arch=amd64 signed-by=/usr/share/keyrings/oracle-virtualbox-2016.gpg] https://download.virtualbox.org/virtualbox/debian jammy contrib'
+    state: present
+    filename: 'vbox'
+    update_cache: true
+
+- name: Install virtual box packages (apt)
+  ansible.builtin.apt:
+    name: virtualbox-6.1
+    state: present
